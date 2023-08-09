@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
-import { useState } from 'react';
 import useInput from '../hooks/use-input';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const formControlCss = css({
   marginBottom: '1rem',
@@ -28,6 +29,10 @@ const errorParagraph = css({
 });
 
 const SignupPage = () => {
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const {
     value: enteredEmail,
     isValid: enteredEmailIsValid,
@@ -51,16 +56,58 @@ const SignupPage = () => {
     formIsValid = true;
   }
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = async e => {
     e.preventDefault();
+
+    setIsLoading(true);
+    setError(null);
 
     if (!formIsValid) {
       return;
     }
 
-    resetNameInput();
-    resetPasswordInput();
+    const user = {
+      email: enteredEmail,
+      password: enteredPassword,
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': `application/json`,
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          '회원 가입 과정에서 문제가 발생했습니다. 다른 이메일로 가입해주세요.'
+        );
+      }
+
+      if (response.ok) {
+        navigate('/signin');
+      }
+
+      resetNameInput();
+      resetPasswordInput();
+    } catch (error) {
+      setError(error.message);
+    }
+
+    setIsLoading(false);
   };
+
+  let content = '';
+
+  if (error) {
+    content = error;
+  }
+
+  if (isLoading) {
+    content = '회원 가입 진행 중...';
+  }
 
   return (
     <>
@@ -100,6 +147,7 @@ const SignupPage = () => {
           </button>
         </div>
       </form>
+      <p>{content}</p>
     </>
   );
 };
