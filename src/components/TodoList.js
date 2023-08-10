@@ -33,14 +33,39 @@ export default function TodoList({ todos, getTodos }) {
     }
   };
 
+  const deleteTodo = async todoId => {
+    setError(null);
+    try {
+      const response = await fetch(`http://localhost:8000/todos/${todoId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQDEiLCJzdWIiOjEsImlhdCI6MTY5MTY0ODIxNiwiZXhwIjoxNjkyMjUzMDE2fQ.Zv3wzxb8swwwWyaamnPAUCYZbTwTD699XFrPMU5Ehyk'}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('삭제 과정에서 문제가 발생했습니다.');
+      }
+
+      if (response.ok) {
+        getTodos();
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const handleCheckBoxChange = e => {
-    console.dir(e.target);
     const {
       checked,
       id,
       dataset: { todo },
     } = e.target;
     updateIsCompleted(id, checked, todo);
+  };
+
+  const handleDeleteButtonClick = e => {
+    deleteTodo(e.target.id);
   };
 
   return (
@@ -58,6 +83,14 @@ export default function TodoList({ todos, getTodos }) {
               />
               <span>{todo.todo}</span>
             </label>
+            <button data-testid="modify-button">수정</button>
+            <button
+              id={todo.id}
+              data-testid="delete-button"
+              onClick={handleDeleteButtonClick}
+            >
+              삭제
+            </button>
           </li>
         ))}
       </ul>
