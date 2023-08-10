@@ -19,14 +19,6 @@ const MainNavigation = () => {
         <ul css={listCss}>
           <li>
             <NavLink
-              to="/"
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-            >
-              홈
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
               to="/signup"
               className={({ isActive }) => (isActive ? 'active' : undefined)}
             >
