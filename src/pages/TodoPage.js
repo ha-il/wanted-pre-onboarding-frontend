@@ -4,6 +4,7 @@ import useInput from '../hooks/use-input';
 import { css } from '@emotion/react';
 import TodoList from '../components/TodoList';
 import AuthContext from '../store/authContext';
+import TodoApi from '../apis';
 
 const formControlCss = css({
   marginBottom: '1rem',
@@ -36,35 +37,31 @@ const TodoPage = () => {
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const getTodos = useCallback(async () => {
+    setError(null);
+    const data = await TodoApi.getTodos({
+      token: ctx.userData.token,
+    });
+    if (!data)
+      return setError('할 일 목록을 불러오는 과정에서 에러가 발생했습니다.');
+    setTodos(data);
+  }, [ctx.userData.token]);
+
+  const addTodo = async todo => {
+    setError(null);
+    const response = await TodoApi.addTodo({ token: ctx.userData.token, todo });
+    if (!response) return setError('할 일 추가 과정에서 에러가 발생했습니다.');
+    getTodos();
+  };
+
   useEffect(() => {
     if (!ctx.userData.token) {
       navigate('/signin');
     }
-  }, [ctx.userData, navigate]);
-
-  const getTodos = useCallback(async () => {
-    setError(null);
-    if (!ctx.userData.token) return;
-    try {
-      const response = await fetch('http://localhost:8000/todos', {
-        method: 'GET',
-        headers: {
-          authorization: `Bearer ${ctx.userData.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('할 일 목록을 불러오는 과정에서 문제가 발생했습니다.');
-      }
-
-      if (response.ok) {
-        const data = await response.json();
-        setTodos(data);
-      }
-    } catch (error) {
-      setError(error.message);
+    if (ctx.userData.token) {
+      getTodos();
     }
-  }, [ctx.userData.token]);
+  }, [ctx.userData, navigate, getTodos]);
 
   const {
     value: enteredTodo,
@@ -83,34 +80,9 @@ const TodoPage = () => {
   const handleFormSubmit = async e => {
     e.preventDefault();
 
-    setError(null);
-
     if (!formIsValid) return;
 
-    if (!ctx.userData.token) return;
-
-    try {
-      const response = await fetch('http://localhost:8000/todos', {
-        method: `POST`,
-        headers: {
-          Authorization: `Bearer ${ctx.userData.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          todo: enteredTodo,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('할 일 추가 과정에서 문제가 발생했습니다.');
-      }
-
-      if (response.ok) {
-        getTodos();
-      }
-    } catch (error) {
-      setError(error.message);
-    }
+    addTodo(enteredTodo);
 
     resetTodoInput();
   };
@@ -124,7 +96,6 @@ const TodoPage = () => {
   return (
     <>
       <h1>투 두 페이지</h1>
-      <h2>{ctx.userData.token}</h2>
       <form onSubmit={handleFormSubmit}>
         <div css={[formControlCss, todoInputHasError && invalidInputCss]}>
           <input

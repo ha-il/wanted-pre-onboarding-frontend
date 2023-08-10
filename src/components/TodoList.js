@@ -1,69 +1,40 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import AuthContext from '../store/authContext';
+import TodoApi from '../apis';
 
 export default function TodoList({ todos, getTodos }) {
   const [error, setError] = useState(null);
   const ctx = useContext(AuthContext);
 
-  useEffect(() => {
-    getTodos();
-  }, [getTodos]);
-
-  const updateIsCompleted = async (todoId, todoIsCompleted, todo) => {
+  const updateIsCompleted = async (todoId, todo, todoIsCompleted) => {
     setError(null);
-    try {
-      const response = await fetch(`http://localhost:8000/todos/${todoId}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${ctx.userData.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          todo,
-          isCompleted: todoIsCompleted,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('완료 업데이트 과정에서 문제가 발생했습니다.');
-      }
-
-      if (response.ok) {
-        getTodos();
-      }
-    } catch (error) {
-      setError(error.message);
-    }
+    const response = await TodoApi.updateIsCompleted({
+      token: ctx.userData.token,
+      todoId,
+      todo,
+      todoIsCompleted,
+    });
+    if (!response) return setError('할 일 완료 과정에서 문제가 발생했습니다.');
+    getTodos();
   };
 
   const deleteTodo = async todoId => {
     setError(null);
-    try {
-      const response = await fetch(`http://localhost:8000/todos/${todoId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${ctx.userData.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('삭제 과정에서 문제가 발생했습니다.');
-      }
-
-      if (response.ok) {
-        getTodos();
-      }
-    } catch (error) {
-      setError(error.message);
-    }
+    const response = await TodoApi.deleteTodo({
+      token: ctx.userData.token,
+      todoId,
+    });
+    if (!response) return setError('할 일 삭제 과정에서 문제가 발생했습니다.');
+    getTodos();
   };
 
   const handleCheckBoxChange = e => {
     const {
-      checked,
       id,
       dataset: { todo },
+      checked,
     } = e.target;
-    updateIsCompleted(id, checked, todo);
+    updateIsCompleted(id, todo, checked);
   };
 
   const handleDeleteButtonClick = e => {
