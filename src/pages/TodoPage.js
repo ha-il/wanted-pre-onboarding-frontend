@@ -34,6 +34,13 @@ const TodoPage = () => {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (!userData) {
+      navigate('/signin');
+    }
+  }, [navigate]);
+
   const getTodos = useCallback(async () => {
     setError(null);
     try {
@@ -56,13 +63,6 @@ const TodoPage = () => {
       setError(error.message);
     }
   }, []);
-
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    if (!userData) {
-      navigate('/signin');
-    }
-  }, [navigate]);
 
   const {
     value: enteredTodo,
