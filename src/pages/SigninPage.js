@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import useInput from '../hooks/use-input';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const formControlCss = css({
   marginBottom: '1rem',
@@ -29,9 +29,17 @@ const errorParagraph = css({
 });
 
 const SigninPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData && userData.token) {
+      navigate('/todo');
+    }
+  }, [navigate]);
+
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const {
     value: enteredEmail,
@@ -52,6 +60,7 @@ const SigninPage = () => {
   } = useInput(value => value.length >= 8);
 
   let formIsValid = false;
+
   if (enteredEmailIsValid && enteredPasswordIsValid) {
     formIsValid = true;
   }
@@ -87,7 +96,11 @@ const SigninPage = () => {
       if (response.ok) {
         const data = await response.json();
         const token = data.access_token;
-        localStorage.setItem('userToken', token);
+        const userData = JSON.stringify({
+          token,
+        });
+
+        localStorage.setItem('userData', userData);
         navigate('/todo');
       }
 
