@@ -44,11 +44,12 @@ const TodoPage = () => {
 
   const getTodos = useCallback(async () => {
     setError(null);
+    if (!ctx.userData.token) return;
     try {
       const response = await fetch('http://localhost:8000/todos', {
         method: 'GET',
         headers: {
-          authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQDEiLCJzdWIiOjEsImlhdCI6MTY5MTY0ODIxNiwiZXhwIjoxNjkyMjUzMDE2fQ.Zv3wzxb8swwwWyaamnPAUCYZbTwTD699XFrPMU5Ehyk'}`,
+          authorization: `Bearer ${ctx.userData.token}`,
         },
       });
 
@@ -63,7 +64,7 @@ const TodoPage = () => {
     } catch (error) {
       setError(error.message);
     }
-  }, []);
+  }, [ctx.userData.token]);
 
   const {
     value: enteredTodo,
@@ -84,15 +85,15 @@ const TodoPage = () => {
 
     setError(null);
 
-    if (!formIsValid) {
-      return;
-    }
+    if (!formIsValid) return;
+
+    if (!ctx.userData.token) return;
 
     try {
       const response = await fetch('http://localhost:8000/todos', {
         method: `POST`,
         headers: {
-          Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQDEiLCJzdWIiOjEsImlhdCI6MTY5MTY0ODIxNiwiZXhwIjoxNjkyMjUzMDE2fQ.Zv3wzxb8swwwWyaamnPAUCYZbTwTD699XFrPMU5Ehyk'}`,
+          Authorization: `Bearer ${ctx.userData.token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -120,7 +121,6 @@ const TodoPage = () => {
     content = error;
   }
 
-  console.log(ctx.userData);
   return (
     <>
       <h1>투 두 페이지</h1>

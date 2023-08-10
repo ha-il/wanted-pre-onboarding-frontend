@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from '../store/authContext';
 
 export default function TodoList({ todos, getTodos }) {
   const [error, setError] = useState(null);
+  const ctx = useContext(AuthContext);
 
   useEffect(() => {
     getTodos();
@@ -13,7 +15,7 @@ export default function TodoList({ todos, getTodos }) {
       const response = await fetch(`http://localhost:8000/todos/${todoId}`, {
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQDEiLCJzdWIiOjEsImlhdCI6MTY5MTY0ODIxNiwiZXhwIjoxNjkyMjUzMDE2fQ.Zv3wzxb8swwwWyaamnPAUCYZbTwTD699XFrPMU5Ehyk'}`,
+          Authorization: `Bearer ${ctx.userData.token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -39,7 +41,7 @@ export default function TodoList({ todos, getTodos }) {
       const response = await fetch(`http://localhost:8000/todos/${todoId}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQDEiLCJzdWIiOjEsImlhdCI6MTY5MTY0ODIxNiwiZXhwIjoxNjkyMjUzMDE2fQ.Zv3wzxb8swwwWyaamnPAUCYZbTwTD699XFrPMU5Ehyk'}`,
+          Authorization: `Bearer ${ctx.userData.token}`,
         },
       });
 
