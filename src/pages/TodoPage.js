@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useInput from '../hooks/use-input';
 import { css } from '@emotion/react';
 import TodoList from '../components/TodoList';
+import AuthContext from '../store/authContext';
 
 const formControlCss = css({
   marginBottom: '1rem',
@@ -30,16 +31,16 @@ const errorParagraph = css({
 });
 
 const TodoPage = () => {
-  const navigate = useNavigate();
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState(null);
+  const ctx = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    if (!userData) {
+    if (!ctx.userData.token) {
       navigate('/signin');
     }
-  }, [navigate]);
+  }, [ctx.userData, navigate]);
 
   const getTodos = useCallback(async () => {
     setError(null);
@@ -119,9 +120,11 @@ const TodoPage = () => {
     content = error;
   }
 
+  console.log(ctx.userData);
   return (
     <>
       <h1>투 두 페이지</h1>
+      <h2>{ctx.userData.token}</h2>
       <form onSubmit={handleFormSubmit}>
         <div css={[formControlCss, todoInputHasError && invalidInputCss]}>
           <input
