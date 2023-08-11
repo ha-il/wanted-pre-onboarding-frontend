@@ -30,8 +30,8 @@ export default function Todo({ todo, updateTodo, deleteTodo }) {
 
   const handleModifyFormSubmit = e => {
     e.preventDefault();
-    const { id, value, checked } = todoInputRef.current;
-    updateTodo(id, value, checked);
+    const { id, value } = todoInputRef.current;
+    updateTodo(id, value, todo.isCompleted);
     setEnteredTodo(value);
     setIsModifying(false);
   };
