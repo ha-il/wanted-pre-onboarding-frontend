@@ -95,7 +95,7 @@ const TodoPage = () => {
 
   return (
     <>
-      <h1>투 두 페이지</h1>
+      <h1>할 일 목록</h1>
       <form onSubmit={handleFormSubmit}>
         <div css={[formControlCss, todoInputHasError && invalidInputCss]}>
           <input
