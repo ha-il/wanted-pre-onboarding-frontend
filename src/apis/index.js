@@ -75,7 +75,7 @@ const TodoApi = {
   async addTodo({ token, todo }) {
     return requestWithoutJson(BASE_URL, HTTP_METHOD.POST(token, todo));
   },
-  async updateIsCompleted({ token, todoId, todo, todoIsCompleted }) {
+  async updateTodo({ token, todoId, todo, todoIsCompleted }) {
     return requestWithoutJson(
       `${BASE_URL}/${todoId}`,
       HTTP_METHOD.PUT(token, todo, todoIsCompleted)
