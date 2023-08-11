@@ -81,13 +81,16 @@ const SignupPage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': `application/json`,
-        },
-        body: JSON.stringify(user),
-      });
+      const response = await fetch(
+        'https://www.pre-onboarding-selection-task.shop/auth/signup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': `application/json`,
+          },
+          body: JSON.stringify(user),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(

@@ -81,13 +81,16 @@ const SigninPage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': `application/json`,
-        },
-        body: JSON.stringify(user),
-      });
+      const response = await fetch(
+        'https://www.pre-onboarding-selection-task.shop/auth/signin',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': `application/json`,
+          },
+          body: JSON.stringify(user),
+        }
+      );
 
       if (!response.ok) {
         throw new Error('로그인 과정에서 문제가 발생했습니다.');

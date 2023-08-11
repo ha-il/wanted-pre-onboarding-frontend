@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000/todos';
+const BASE_URL = 'https://www.pre-onboarding-selection-task.shop/todos';
 
 const HTTP_METHOD = {
   GET(token) {
