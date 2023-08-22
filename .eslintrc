@@ -1,0 +1,7 @@
+{
+  "extends": ["react-app", "eslint:recommended", "prettier"],
+
+  "env": {
+    "es6": true
+  }
+}
