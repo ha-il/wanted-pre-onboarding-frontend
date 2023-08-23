@@ -42,8 +42,7 @@ const TodoPage = () => {
     const data = await TodoApi.getTodos({
       token: ctx.userData.token,
     });
-    if (!data)
-      return setError('할 일 목록을 불러오는 과정에서 에러가 발생했습니다.');
+    if (!data) return setError('할 일 목록을 불러오는 과정에서 에러가 발생했습니다.');
     setTodos(data);
   }, [ctx.userData.token]);
 
@@ -106,9 +105,7 @@ const TodoPage = () => {
             placeholder="할 일을 입력해주세요."
           />
           <button data-testid="new-todo-add-button">추가</button>
-          {todoInputHasError && (
-            <p css={errorParagraph}>빈 칸은 제출할 수 없습니다.</p>
-          )}
+          {todoInputHasError && <p css={errorParagraph}>빈 칸은 제출할 수 없습니다.</p>}
         </div>
       </form>
       <p>{content}</p>

@@ -81,16 +81,13 @@ const SigninPage = () => {
     };
 
     try {
-      const response = await fetch(
-        'https://www.pre-onboarding-selection-task.shop/auth/signin',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': `application/json`,
-          },
-          body: JSON.stringify(user),
-        }
-      );
+      const response = await fetch('https://www.pre-onboarding-selection-task.shop/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': `application/json`,
+        },
+        body: JSON.stringify(user),
+      });
 
       if (!response.ok) {
         throw new Error('로그인 과정에서 문제가 발생했습니다.');
@@ -140,9 +137,7 @@ const SigninPage = () => {
             onBlur={hadleEmailInputBlur}
             value={enteredEmail}
           />
-          {emailInputHasError && (
-            <p css={errorParagraph}>이메일 주소에 '@'를 포함해 주세요.</p>
-          )}
+          {emailInputHasError && <p css={errorParagraph}>이메일 주소에 '@'를 포함해 주세요.</p>}
         </div>
         <div css={[formControlCss, passwordInpuHasError && invalidInputCss]}>
           <label htmlFor="password">비밀번호</label>
@@ -155,9 +150,7 @@ const SigninPage = () => {
             value={enteredPassword}
           />
         </div>
-        {passwordInpuHasError && (
-          <p css={errorParagraph}>비밀번호를 8자 이상 입력해 주세요.</p>
-        )}
+        {passwordInpuHasError && <p css={errorParagraph}>비밀번호를 8자 이상 입력해 주세요.</p>}
         <div className="form-actions">
           <button disabled={!formIsValid} data-testid="signin-button">
             로그인

@@ -18,26 +18,17 @@ const MainNavigation = () => {
       <nav>
         <ul css={listCss}>
           <li>
-            <NavLink
-              to="/signup"
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-            >
+            <NavLink to="/signup" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               가입하기
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/signin"
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-            >
+            <NavLink to="/signin" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               로그인하기
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/todo"
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-            >
+            <NavLink to="/todo" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               할 일
             </NavLink>
           </li>

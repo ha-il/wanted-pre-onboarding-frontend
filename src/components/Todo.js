@@ -50,18 +50,10 @@ export default function Todo({ todo, updateTodo, deleteTodo }) {
             />
             <span>{enteredTodo}</span>
           </label>
-          <button
-            id={todo.id}
-            data-testid="modify-button"
-            onClick={handleModifyButtonCLick}
-          >
+          <button id={todo.id} data-testid="modify-button" onClick={handleModifyButtonCLick}>
             수정
           </button>
-          <button
-            id={todo.id}
-            data-testid="delete-button"
-            onClick={handleDeleteButtonClick}
-          >
+          <button id={todo.id} data-testid="delete-button" onClick={handleDeleteButtonClick}>
             삭제
           </button>
         </>
@@ -78,11 +70,7 @@ export default function Todo({ todo, updateTodo, deleteTodo }) {
           <button type="submit" data-testid="submit-button">
             제출
           </button>
-          <button
-            type="button"
-            data-testid="cancel-button"
-            onClick={handleCancleButtonCLick}
-          >
+          <button type="button" data-testid="cancel-button" onClick={handleCancleButtonCLick}>
             취소
           </button>
         </form>

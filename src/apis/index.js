@@ -82,10 +82,7 @@ const TodoApi = {
     );
   },
   async deleteTodo({ token, todoId }) {
-    return requestWithoutJson(
-      `${BASE_URL}/${todoId}`,
-      HTTP_METHOD.DELETE(token)
-    );
+    return requestWithoutJson(`${BASE_URL}/${todoId}`, HTTP_METHOD.DELETE(token));
   },
 };
 
